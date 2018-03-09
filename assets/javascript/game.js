@@ -30,20 +30,26 @@ let game = {
         if (this.selectingCharacters) {
             if (game.userCharacter === '') {
                 this.userCharacter = clickedChar;
+                charDiv.attr("class","user-character");
                 charDiv.css("border","5px solid green");
+                this.enemies.splice(this.enemies.indexOf(clickedChar), 1);
+                $(".enemy").each(function() {
+                    $("#enemy-container").append($(this));
+                });
                 console.log('User character:');
                 console.log(this.userCharacter);
-                // TODO: move remaining enemies to new area
             }
             else if (game.defender === '') {
                 this.defender = clickedChar;
+                charDiv.attr("class","defender");
                 charDiv.css("border","5px solid red");
                 this.selectingCharacters = false;
+                this.enemies.splice(this.enemies.indexOf(clickedChar), 1);
+                $("#defender-container").append(charDiv);
                 console.log('Defender:');
                 console.log(this.defender);
-                // TODO: move defender to new area
             }
-            this.enemies.splice(this.enemies.indexOf(clickedChar), 1);
+            
             console.log('Enemies:');
             console.log(this.enemies);
         }
@@ -68,7 +74,7 @@ let game = {
     }
 }
 
-$(".character").on("click", function() {
+$(".enemy").on("click", function() {
     game.pickCharacters($(this));
 });
 
