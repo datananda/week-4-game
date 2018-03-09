@@ -1,0 +1,15 @@
+#user-character {
+    border: 5px solid green;
+}
+
+.enemy {
+    border: 5px solid yellow;
+}
+
+#defender {
+    border: 5px solid red;
+}
+
+.hidden {
+    display: none;
+}
