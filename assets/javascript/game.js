@@ -40,21 +40,28 @@ let game = {
         console.log(this.enemies);
     },
     attack: function () {
-        if ($(".character[id='defender']").length) {
-            console.log(`You attacked ${this.defender.name} for ${this.userCharacter.attackPower} damage.`);
-            console.log(`${this.defender.name} attacked you back for ${this.defender.counterPower} damage.`);
-            this.defender.healthPoints -= this.userCharacter.attackPower;
-            this.userCharacter.healthPoints -= this.defender.counterPower;
-            this.userCharacter.attackPower += this.userCharacter.attackPower;
-            if (!this.userCharacter.checkAlive()) {
-                console.log("You're dead");
-                $("#btn-restart").removeClass();
-            }
-            else if (!this.defender.checkAlive()) {
-                console.log("You're victorious");
-                // TODO: remove current defender and select a new one
-                $("#defender").removeAttr("id").addClass("hidden");
-                this.selectingCharacters = true;
+        if (!$(".character[id='defender']").length) {
+            $("#attack-outcome").text("No enemy here");
+        }
+        else {
+            if ($("#btn-restart").hasClass("hidden")) {
+                let attackSummary = `You attacked ${this.defender.name} for ${this.userCharacter.attackPower} damage.\n${this.defender.name} attacked you back for ${this.defender.counterPower} damage.`;
+                this.defender.healthPoints -= this.userCharacter.attackPower;
+                this.userCharacter.healthPoints -= this.defender.counterPower;
+                this.userCharacter.attackPower += this.userCharacter.attackPower;
+                if (!this.userCharacter.checkAlive()) {
+                    console.log("You're dead");
+                    $("#attack-outcome").text(`You've been defeated by ${this.defender.name}. Game Over!`);
+                    $("#btn-restart").removeClass();
+                }
+                else if (!this.defender.checkAlive()) {
+                    console.log("You're victorious");
+                    $("#attack-outcome").text(`You have defeated ${this.defender.name}. Select the enemy you will fight next.`);
+                    $("#defender").removeAttr("id").addClass("hidden");
+                }
+                else {
+                    $("#attack-outcome").text(attackSummary);
+                }
             }
         }
     },
@@ -62,13 +69,14 @@ let game = {
         this.userCharacter = '';
         this.defender = '';
         this.enemies = [character0, character1, character2, character3];
-        this.selectingCharacters = true;
+        $("#attack-outcome").text('');
         $(".character").removeAttr("id");
         $(".character").removeClass().addClass("character");
         for (let i = 0; i < characters.length; i++) {
             $(".starting-container").append($(`.character[value=${i}]`));
         }
         $("#btn-restart").addClass("hidden");
+        // TODO: need to reset all character HP & attack power
     }
 }
 
