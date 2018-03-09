@@ -3,34 +3,75 @@ function Character(name, healthPoints, attackPower, counterPower) {
     this.healthPoints = healthPoints;
     this.attackPower = attackPower;
     this.counterPower = counterPower;
-    this.isEnemy = false;
-    this.isDefender = false;
-    this.attack = function () {
-        console.log("attacking");
-    }
-    this.counter = function () {
-        console.log("counter");
-    }
-    this.checkHealth = function () {
+    this.checkAlive = function () {
         if (this.healthPoints > 0) {
-            console.log("healthy");
+            return true;
         }
         else {
-            console.log("dead");
+            return false;
         }
-    }
-    this.takeHit = function () {
-        console.log("i got hit");
     }
 }
 
-let character0 = new Character("Character 1", 90, 4, 20);
-let character1 = new Character("Character 2", 100, 6, 25);
-let character2 = new Character("Character 3", 110, 8, 30);
-let character3 = new Character("Character 4", 120, 10, 35);
-
+let character0 = new Character("Cat", 90, 4, 20);
+let character1 = new Character("Mouse", 100, 6, 25);
+let character2 = new Character("Racoon", 110, 8, 30);
+let character3 = new Character("Dog", 120, 10, 35);
 let characters = [character0, character1, character2, character3];
 
+let game = {
+    userCharacter: '',
+    defender: '',
+    enemies: [character0, character1, character2, character3],
+    gameOver: false,
+    selectingCharacters: true,
+    pickCharacters: function(charDiv) {
+        let clickedChar = characters[charDiv.attr("value")];
+        if (this.selectingCharacters) {
+            if (game.userCharacter === '') {
+                this.userCharacter = clickedChar;
+                charDiv.css("border","5px solid green");
+                console.log('User character:');
+                console.log(this.userCharacter);
+                // TODO: move remaining enemies to new area
+            }
+            else if (game.defender === '') {
+                this.defender = clickedChar;
+                charDiv.css("border","5px solid red");
+                this.selectingCharacters = false;
+                console.log('Defender:');
+                console.log(this.defender);
+                // TODO: move defender to new area
+            }
+            this.enemies.splice(this.enemies.indexOf(clickedChar), 1);
+            console.log('Enemies:');
+            console.log(this.enemies);
+        }
+    },
+    attack: function() {
+        if (!this.selectingCharacters) {
+            console.log(`You attacked ${this.defender.name} for ${this.userCharacter.attackPower} damage.`);
+            console.log(`${this.defender.name} attacked you back for ${this.defender.counterPower} damage.`);
+            this.defender.healthPoints -= this.userCharacter.attackPower;
+            this.userCharacter.healthPoints -= this.defender.counterPower;
+            this.userCharacter.attackPower += this.userCharacter.attackPower;
+            if (!this.userCharacter.checkAlive()) {
+                console.log("You dead");
+                // TODO: start new game
+            }
+            else if (!this.defender.checkAlive()) {
+                console.log("You victorious");
+                // TODO: remove current defender and select a new one
+                this.selectingCharacters = true;
+            }
+        }
+    }
+}
+
 $(".character").on("click", function() {
-    console.log(characters[$(this).attr("id").slice(-1)]);
+    game.pickCharacters($(this));
 });
+
+$("#btn-attack").on("click", function() {
+    game.attack();
+})
