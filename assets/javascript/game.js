@@ -22,9 +22,11 @@ let game = {
             $(".character").each(function () {
                 if (!$(this).attr("id")) {
                     $(this).addClass("enemy");
-                    $("#enemy-container").append($(this));
+                    $("#defender-container").append($(this));
                 }
             });
+            $("h2").replaceWith(toH3($("h2")).text("Your Character"));
+            $("#defender-container").parent().before($("<h2>").addClass("col-12").text("Pick Your Opponent"));
             console.log('User character:');
             console.log(this.userCharacter);
         }
@@ -32,7 +34,15 @@ let game = {
             this.defender = clickedChar;
             charDiv.attr("id", "defender");
             this.enemies.splice(this.enemies.indexOf(clickedChar), 1);
-            $("#defender-container").append(charDiv);
+            $(".enemy").each(function () {
+                if (!$(this).attr("id")) {
+                    $("#enemy-container").append($(this));
+                }
+            });
+            $("h2").replaceWith(toH3($("h2")).text("Your Opponent"));
+            $("#enemy-container").parent().before($("<h4>").addClass("col-12").text("Remaining Enemies"));
+            $("h3").parent().parent().removeClass().addClass("col-4");
+            $("#btn-attack").removeClass("hidden");
             console.log('Defender:');
             console.log(this.defender);
         }
@@ -44,7 +54,7 @@ let game = {
             $("#attack-outcome").text("No enemy here");
         }
         else {
-            if ($("#btn-restart").hasClass("hidden")) {
+            if ($("#btn-reset").hasClass("hidden")) {
                 let attackSummary = `You attacked ${this.defender.name} for ${this.userCharacter.attackPower} damage.\n${this.defender.name} attacked you back for ${this.defender.counterPower} damage.`;
                 this.defender.healthPoints -= this.userCharacter.attackPower;
                 this.userCharacter.healthPoints -= this.defender.counterPower;
@@ -73,7 +83,7 @@ let game = {
         $(".character").removeAttr("id");
         $(".character").removeClass().addClass("character");
         for (let i = 0; i < characters.length; i++) {
-            $(".starting-container").append($(`.character[value=${i}]`));
+            $("#starting-container").append($(`.character[value=${i}]`));
         }
         $("#btn-restart").addClass("hidden");
         // TODO: need to reset all character HP & attack power
@@ -96,6 +106,10 @@ function Character(name, healthPoints, attackPower, counterPower) {
             return false;
         }
     }
+}
+
+function toH3(obj) {
+    return $("<h3>").addClass(obj.attr("class"));
 }
 
 /*---------------------------

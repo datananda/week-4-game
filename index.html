@@ -5,32 +5,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="assets/css/reset.css">
+    <title>World Leader RPG</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
-    <div class="starting-container">
-        <div class="character" value="0">
-            <img src='assets/images/cat.jpg' alt='' />
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-12">
+                <h1>World Leader Role-Playing Game</h1>
+            </div>
         </div>
-        <div class="character" value="1">
-            <img src='assets/images/mouse.jpg' alt='' />
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <h2 class="col-12">Pick Your Character</h2>
+                    <div class="col-12">
+                        <div class="row justify-content-center" id="starting-container">
+                            <div class="col-auto character" value="0">
+                                <img class="rounded-circle" src='assets/images/cat.jpg' alt='' />
+                            </div>
+                            <div class="col-auto character" value="1">
+                                <img class="rounded-circle" src='assets/images/mouse.jpg' alt='' />
+                            </div>
+                            <div class="col-auto character" value="2">
+                                <img class="rounded-circle" src='assets/images/racoon.jpg' alt='' />
+                            </div>
+                            <div class="col-auto character" value="3">
+                                <img class="rounded-circle" src='assets/images/dog.jpg' alt='' />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 d-flex align-items-center justify-content-center">
+                <button type="button" class="btn btn-danger btn-lg hidden" id="btn-attack">Attack</button>
+                <button type="button" class="btn btn-secondary btn-lg hidden" id="btn-reset">Reset</button>
+            </div>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row justify-content-center" id="defender-container">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div id="attack-outcome"></div>
+            </div>
         </div>
-        <div class="character" value="2">
-            <img src='assets/images/racoon.jpg' alt='' />
-        </div>
-        <div class="character" value="3">
-            <img src='assets/images/dog.jpg' alt='' />
+        <div class="row fixed-bottom">
+            <div class="col-12">
+                <div class="row justify-content-center" id="enemy-container">
+
+                </div>
+            </div>
         </div>
     </div>
-    <div id="enemy-container"></div>
-    <div id="defender-container"></div>
-    <button id="btn-attack">Attack</button>
-    <div id="attack-outcome"></div>
-    <button id="btn-restart" class="hidden">Restart</button>
+
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
     <script src="assets/javascript/game.js"></script>
 </body>

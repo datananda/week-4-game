@@ -1,12 +1,12 @@
-#user-character {
+#user-character img {
     border: 5px solid green;
 }
 
-.enemy {
+.enemy img {
     border: 5px solid yellow;
 }
 
-#defender {
+#defender img {
     border: 5px solid red;
 }
 
@@ -16,4 +16,8 @@
 
 #attack-outcome {
     white-space: pre-wrap;
+}
+
+.character {
+    display: inline-block;
 }
