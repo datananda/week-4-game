@@ -11,63 +11,66 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
-<body>
-    <div class="container text-center">
-        <div class="row">
-            <div class="col-12">
-                <h1>World Leader Role-Playing Game</h1>
+<body class="text-center">
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h1>World Leader Role-Playing Game</h1>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="row">
-                    <h2 class="col-12">Pick Your Character</h2>
-                    <div class="col-12">
-                        <div class="row justify-content-center" id="starting-container">
-                            <div class="col-auto character" value="0">
-                                <img class="rounded-circle" src='assets/images/cat.jpg' alt='' />
-                            </div>
-                            <div class="col-auto character" value="1">
-                                <img class="rounded-circle" src='assets/images/mouse.jpg' alt='' />
-                            </div>
-                            <div class="col-auto character" value="2">
-                                <img class="rounded-circle" src='assets/images/racoon.jpg' alt='' />
-                            </div>
-                            <div class="col-auto character" value="3">
-                                <img class="rounded-circle" src='assets/images/dog.jpg' alt='' />
-                            </div>
+    </header>
+    <main>
+        <section>
+            <div class="container" id="selection-container">
+                <div class="row" id="select-character">
+                    <div class="col">
+                        <h2>Pick Your Character</h2>
+                        <div class="col-auto character" value="0">
+                            <img class="rounded-circle" src='assets/images/cat.jpg' alt='' />
+                        </div>
+                        <div class="col-auto character" value="1">
+                            <img class="rounded-circle" src='assets/images/mouse.jpg' alt='' />
+                        </div>
+                        <div class="col-auto character" value="2">
+                            <img class="rounded-circle" src='assets/images/racoon.jpg' alt='' />
+                        </div>
+                        <div class="col-auto character" value="3">
+                            <img class="rounded-circle" src='assets/images/dog.jpg' alt='' />
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-4 d-flex align-items-center justify-content-center">
-                <button type="button" class="btn btn-danger btn-lg d-none" id="btn-attack">Attack</button>
-                <button type="button" class="btn btn-secondary btn-lg d-none" id="btn-reset">Reset</button>
-            </div>
-            <div class="col-12">
                 <div class="row">
-                    <div class="col-12">
-                        <div class="row justify-content-center" id="defender-container">
-
-                        </div>
+                    <div class="col d-none" id="select-opponent">
+                        <h2>Pick Your Opponent</h2>
                     </div>
                 </div>
             </div>
-            <div class="col-12">
-                <div id="attack-outcome"></div>
-            </div>
-        </div>
-        <div class="row fixed-bottom">
-            <div class="col-12">
-                <h4 class="d-none">Remaining Enemies</h4>
-            </div>
-            <div class="col-12">
-                <div class="row justify-content-center" id="enemy-container">
+        </section>
+        <section>
+            <div class="container d-none" id="play-container">
+                <div class="row">
+                    <div class="col-4" id="character-container"></div>
+                    <div class="col-4 d-flex align-items-center justify-content-center">
+                        <button type="button" class="btn btn-danger btn-lg" id="btn-attack">Attack</button>
+                        <button type="button" class="btn btn-secondary btn-lg d-none" id="btn-reset">Reset</button>
+                    </div>
+                    <div class="col-4" id="opponent-container"></div>
+                </div>
+                <div class="row">
+                    <div class="col" id="attack-outcome">
 
+                    </div>
+                </div>
+                <div class="row fixed-bottom">
+                    <div class="col" id="enemy-container">
+                        <h2>Remaining Enemies</h2>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>

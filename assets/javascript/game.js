@@ -9,87 +9,83 @@ const characters = [character0, character1, character2, character3];
 
 let game = {
     userCharacter: '',
-    defender: '',
+    opponent: '',
     enemies: [character0, character1, character2, character3],
     pickCharacters: function (charDiv) {
         let clickedChar = characters[charDiv.attr("value")];
-        console.log('You clicked on:');
-        console.log(clickedChar);
-        if (!$(".character[id='user-character']").length) {
+        console.log('You clicked on:', clickedChar);
+        if (!this.userCharacter) {
             this.userCharacter = clickedChar;
             charDiv.attr("id", "user-character");
             this.enemies.splice(this.enemies.indexOf(clickedChar), 1);
-            $(".character").each(function () {
-                if (!$(this).attr("id")) {
-                    $(this).addClass("enemy");
-                    $("#defender-container").append($(this));
-                }
+            $(".character:not([id])").each(function () {
+                $(this).addClass("enemy");
+                $("#select-opponent").append($(this));
             });
-            $("h2").replaceWith(toH3($("h2")).text("Your Character"));
-            $("#defender-container").parent().before($("<h2>").addClass("col-12").text("Pick Your Opponent"));
-            console.log('User character:');
-            console.log(this.userCharacter);
+            $("#select-character").addClass("d-none");
+            $("#select-opponent").removeClass("d-none");
+            $("#character-container").append(charDiv);
+            console.log('User character:', this.userCharacter);
         }
-        else if (!$(".character[id='defender']").length) {
-            this.defender = clickedChar;
-            charDiv.attr("id", "defender");
+        else if (!this.opponent) {
+            this.opponent = clickedChar;
+            charDiv.attr("id", "opponent");
             this.enemies.splice(this.enemies.indexOf(clickedChar), 1);
-            $("#defender-container").append($("#defender"));
-            $(".enemy").each(function () {
-                if (!$(this).attr("id")) {
-                    $("#enemy-container").append($(this));
-                }
+            $(".enemy:not([id])").each(function () {
+                $("#enemy-container").append($(this));
             });
-            $("h2").replaceWith(toH3($("h2")).text("Your Opponent"));
-            $("h4").removeClass("d-none");
-            $("h3").parent().parent().removeClass().addClass("col-4");
-            $("#btn-attack").removeClass("d-none");
-            console.log('Defender:');
-            console.log(this.defender);
+            $("#opponent-container").append(charDiv);
+            $("#selection-container").addClass("d-none");
+            $("#play-container").removeClass("d-none");
+            $("#attack-outcome").text('');
+            console.log('Opponent:', this.opponent);
         }
-        console.log('Enemies:');
-        console.log(this.enemies);
+        console.log('Enemies:', this.enemies);
     },
     attack: function () {
-        if (!$(".character[id='defender']").length) {
+        if (!$(".character[id='opponent']").length) {
             $("#attack-outcome").text("No enemy here. Select the enemy you will fight next.");
         }
         else {
-            if ($("#btn-reset").hasClass("d-none")) {
-                let attackSummary = `You attacked ${this.defender.name} for ${this.userCharacter.attackPower} damage.\n${this.defender.name} attacked you back for ${this.defender.counterPower} damage.`;
-                this.defender.healthPoints -= this.userCharacter.attackPower;
-                this.userCharacter.healthPoints -= this.defender.counterPower;
-                this.userCharacter.attackPower += this.userCharacter.attackPower;
-                if (!this.userCharacter.checkAlive()) {
-                    console.log("You're dead");
-                    $("#attack-outcome").text(`You've been defeated by ${this.defender.name}. Game Over!`);
-                    $("#btn-attack").addClass("d-none");
-                    $("#btn-reset").removeClass("d-none");
-                }
-                else if (!this.defender.checkAlive()) {
-                    console.log("You're victorious");
-                    $("#attack-outcome").text(`You have defeated ${this.defender.name}. Select the enemy you will fight next.`);
-                    $("#defender").removeAttr("id").addClass("d-none");
-                }
-                else {
-                    $("#attack-outcome").text(attackSummary);
-                }
+            let attackSummary = `You attacked ${this.opponent.name} for ${this.userCharacter.attackPower} damage.\n${this.opponent.name} attacked you back for ${this.opponent.counterPower} damage.`;
+            this.opponent.healthPoints -= this.userCharacter.attackPower;
+            this.userCharacter.healthPoints -= this.opponent.counterPower;
+            this.userCharacter.attackPower += this.userCharacter.attackPower;
+            if (!this.userCharacter.checkAlive()) {
+                console.log("You're dead");
+                $("#attack-outcome").text(`You've been defeated by ${this.opponent.name}. Game Over!`);
+                $("#btn-attack").addClass("d-none");
+                $("#btn-reset").removeClass("d-none");
             }
+            else if (!this.opponent.checkAlive()) {
+                console.log("You're victorious");
+                $("#attack-outcome").text(`You have defeated ${this.opponent.name}. Select the enemy you will fight next.`);
+                $("#opponent").removeAttr("id").addClass("d-none");
+                this.opponent = '';
+            }
+            else {
+                $("#attack-outcome").text(attackSummary);
+            }
+            // TODO: update HP on user char and opponent in the DOM
         }
     },
     resetGame: function () {
         this.userCharacter = '';
-        this.defender = '';
+        this.opponent = '';
         this.enemies = [character0, character1, character2, character3];
         $("#attack-outcome").text('');
-        $(".character").removeAttr("id");
-        $(".character").removeClass().addClass("character");
+        $(".character").removeAttr("id").removeClass().addClass("col-auto character");
         for (let i = 0; i < characters.length; i++) {
-            $("#starting-container").append($(`.character[value=${i}]`));
+            console.log($(`.character[value=${i}]`));
+            $("#select-character > .col").append($(`.character[value=${i}]`));
         }
         $("#btn-reset").addClass("d-none");
-        // TODO: replace the whole body with a copy taken at initialization
-        // TODO: need to reset all character HP & attack power
+        $("#btn-attack").removeClass("d-none");
+        $("#select-opponent").addClass("d-none");
+        $("#play-container").addClass("d-none");
+        $("#selection-container").removeClass("d-none");
+        $("#select-character").removeClass("d-none");
+        // TODO: need to reset all character HP & attack power & update numbers in the DOM
     }
 }
 
@@ -111,10 +107,6 @@ function Character(name, healthPoints, attackPower, counterPower) {
     }
 }
 
-function toH3(obj) {
-    return $("<h3>").addClass(obj.attr("class"));
-}
-
 /*---------------------------
     MAIN PROCESS
 ---------------------------*/
@@ -127,6 +119,5 @@ $("#btn-attack").on("click", function () {
 })
 
 $("#btn-reset").on("click", function () {
-    console.log("clicked reset button");
     game.resetGame();
 })
