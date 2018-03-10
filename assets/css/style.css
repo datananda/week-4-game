@@ -10,10 +10,6 @@
     border: 5px solid red;
 }
 
-.hidden {
-    display: none;
-}
-
 #attack-outcome {
     white-space: pre-wrap;
 }
