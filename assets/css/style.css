@@ -1,3 +1,19 @@
+body {
+    background-image: url("../images/stardust.png");
+}
+
+h1,
+h2,
+button {
+    font-family: 'Black Ops One', cursive;
+}
+
+figcaption,
+.health,
+#attack-outcome {
+    font-family: 'Inconsolata', monospace;
+}
+
 #user-character img {
     border: 5px solid green;
 }
@@ -27,6 +43,7 @@
     font-size: 1.25em;
     line-height: 1.8em;
     width: 2.4em;
+    font-weight: bold;
 }
 
 .figure-caption {
@@ -58,4 +75,8 @@
 
 #enemy-container .char-stats {
     bottom: 15%;
+}
+
+.btn-lg {
+    font-size: 2.25rem;
 }

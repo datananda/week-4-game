@@ -1,23 +1,13 @@
 /*---------------------------
     GLOBAL VARIABLES
 ---------------------------*/
+let startingHP = [90, 100, 110, 120];
+let startingAttackPower = [4, 6, 8, 10];
 let character0 = new Character("Donald Trump", "US", 90, 4, 20);
 let character1 = new Character("Vladimir Putin", "RU", 100, 6, 25);
 let character2 = new Character("Kim Jong Un", "KP", 110, 8, 30);
 let character3 = new Character("Xi Jinping", "CN", 120, 10, 35);
 const characters = [character0, character1, character2, character3];
-
-
-/* <div class="character" value="0">
-<figure class="figure">
-    <figcaption class="figure-caption">Donald Trump</figcaption>
-    <img src="assets/images/trump.png" class="figure-img img-fluid rounded-circle border" alt="cartoon of Donald Trump">
-</figure>
-<div class="char-stats position-absolute d-flex justify-content-between w-75">
-    <div class="health border bg-light">120</div>
-    <span class="flag-icon flag-icon-us border"></span>
-</div>
-</div> */
 
 let game = {
     userCharacter: '',
@@ -25,6 +15,8 @@ let game = {
     enemies: [character0, character1, character2, character3],
     startGame: function () {
         characters.forEach(function(elem, i) {
+            elem.healthPoints = startingHP[i];
+            elem.attackPower = startingAttackPower[i];
             $(`img:eq(${i})`).attr("src",`assets/images/${elem.name.toLowerCase()}.png`);
             $(`img:eq(${i})`).attr("alt",`cartoon of ${elem.name}`);
             $(`.health:eq(${i})`).text(elem.healthPoints);  
@@ -42,7 +34,7 @@ let game = {
             $(".character:not([id])").each(function (i) {
                 console.log("Moving enemy:", $(this));
                 $(this).addClass("enemy");
-                $(`#select-opponent .col-6:nth-child(${i + 1})`).append($(this));
+                $(`#select-opponent .col-8:nth-child(${i + 1})`).append($(this));
             });
             $("#select-character").addClass("d-none");
             $("#select-opponent").removeClass("d-none");
@@ -60,6 +52,7 @@ let game = {
             $("#selection-container").addClass("d-none");
             $("#play-container").removeClass("d-none");
             $("#attack-outcome").text('');
+            $("#attack-outcome").removeClass("bg-secondary bg-success").addClass("bg-danger d-none");
             formatCircleType();
             console.log('Opponent:', this.opponent);
         }
@@ -72,16 +65,20 @@ let game = {
         else {
             let attackSummary = `You attacked ${this.opponent.name} for ${this.userCharacter.attackPower} damage.\n${this.opponent.name} attacked you back for ${this.opponent.counterPower} damage.`;
             this.opponent.healthPoints -= this.userCharacter.attackPower;
+            $(`#opponent .health`).text(this.opponent.healthPoints);
             this.userCharacter.healthPoints -= this.opponent.counterPower;
+            $(`#user-character .health`).text(this.userCharacter.healthPoints);
             this.userCharacter.attackPower += this.userCharacter.attackPower;
             if (!this.userCharacter.checkAlive()) {
                 console.log("You're dead");
+                $("#attack-outcome").removeClass("bg-danger bg-success").addClass("bg-secondary");
                 $("#attack-outcome").text(`You've been defeated by ${this.opponent.name}. Game Over!`);
                 $("#btn-attack").addClass("d-none");
                 $("#btn-reset").removeClass("d-none");
             }
             else if (!this.opponent.checkAlive()) {
                 console.log("You're victorious");
+                $("#attack-outcome").removeClass("bg-danger bg-secondary").addClass("bg-success");
                 $("#attack-outcome").text(`You have defeated ${this.opponent.name}. Select the enemy you will fight next.`);
                 $("#opponent").removeAttr("id").addClass("d-none");
                 this.opponent = '';
@@ -89,7 +86,7 @@ let game = {
             else {
                 $("#attack-outcome").text(attackSummary);
             }
-            // TODO: update HP on user char and opponent in the DOM
+            $("#attack-outcome").removeClass("d-none");
         }
     },
     resetGame: function () {
@@ -97,10 +94,10 @@ let game = {
         this.opponent = '';
         this.enemies = [character0, character1, character2, character3];
         $("#attack-outcome").text('');
-        $(".character").removeAttr("id").removeClass("enemy");
+        $(".character").removeAttr("id").removeClass("enemy d-none");
         for (let i = 0; i < characters.length; i++) {
             console.log($(`.character[value=${i}]`));
-            $(`#select-character .col-6:nth-child(${i + 1})`).append($(`.character[value=${i}]`));
+            $(`#select-character .col-8:eq(${i})`).append($(`.character[value=${i}]`));
         }
         $("#btn-reset").addClass("d-none");
         $("#btn-attack").removeClass("d-none");
@@ -108,7 +105,8 @@ let game = {
         $("#play-container").addClass("d-none");
         $("#selection-container").removeClass("d-none");
         $("#select-character").removeClass("d-none");
-        // TODO: need to reset all character HP & attack power & update numbers in the DOM
+        $("#attack-outcome").removeClass("bg-secondary bg-success").addClass("bg-danger d-none");
+        this.startGame();
     }
 }
 
