@@ -17,3 +17,45 @@
 .character {
     display: inline-block;
 }
+
+.flag-icon {
+    width: 3em;
+    line-height: 2.25em;
+}
+
+.health {
+    font-size: 1.25em;
+    line-height: 1.8em;
+    width: 2.4em;
+}
+
+.figure-caption {
+    font-size: 2em;
+    height: 3rem;
+}
+
+.char-stats {
+    padding: inherit;
+    bottom: 5%;
+    left: 12.5%;
+}
+
+#enemy-container .figure-caption {
+    font-size: 1em;
+    height: 1.5rem;
+}
+
+#enemy-container .flag-icon {
+    width: 1.5em;
+    line-height: 1.125em;
+}
+
+#enemy-container .health {
+    font-size: 0.75em;
+    line-height: 1.5em;
+    width: 2em;
+}
+
+#enemy-container .char-stats {
+    bottom: 15%;
+}

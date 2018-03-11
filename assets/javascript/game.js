@@ -1,16 +1,37 @@
 /*---------------------------
     GLOBAL VARIABLES
 ---------------------------*/
-let character0 = new Character("Cat", 90, 4, 20);
-let character1 = new Character("Mouse", 100, 6, 25);
-let character2 = new Character("Racoon", 110, 8, 30);
-let character3 = new Character("Dog", 120, 10, 35);
+let character0 = new Character("Donald Trump", "US", 90, 4, 20);
+let character1 = new Character("Vladimir Putin", "RU", 100, 6, 25);
+let character2 = new Character("Kim Jong Un", "KP", 110, 8, 30);
+let character3 = new Character("Xi Jinping", "CN", 120, 10, 35);
 const characters = [character0, character1, character2, character3];
+
+
+/* <div class="character" value="0">
+<figure class="figure">
+    <figcaption class="figure-caption">Donald Trump</figcaption>
+    <img src="assets/images/trump.png" class="figure-img img-fluid rounded-circle border" alt="cartoon of Donald Trump">
+</figure>
+<div class="char-stats position-absolute d-flex justify-content-between w-75">
+    <div class="health border bg-light">120</div>
+    <span class="flag-icon flag-icon-us border"></span>
+</div>
+</div> */
 
 let game = {
     userCharacter: '',
     opponent: '',
     enemies: [character0, character1, character2, character3],
+    startGame: function () {
+        characters.forEach(function(elem, i) {
+            $(`img:eq(${i})`).attr("src",`assets/images/${elem.name.toLowerCase()}.png`);
+            $(`img:eq(${i})`).attr("alt",`cartoon of ${elem.name}`);
+            $(`.health:eq(${i})`).text(elem.healthPoints);  
+            $(`.figure-caption:eq(${i})`).text(elem.name);
+            $(`.flag-icon:eq(${i})`).addClass(`flag-icon-${elem.country.toLowerCase()}`);
+        });
+    },
     pickCharacters: function (charDiv) {
         let clickedChar = characters[charDiv.attr("value")];
         console.log('You clicked on:', clickedChar);
@@ -18,9 +39,10 @@ let game = {
             this.userCharacter = clickedChar;
             charDiv.attr("id", "user-character");
             this.enemies.splice(this.enemies.indexOf(clickedChar), 1);
-            $(".character:not([id])").each(function () {
+            $(".character:not([id])").each(function (i) {
+                console.log("Moving enemy:", $(this));
                 $(this).addClass("enemy");
-                $("#select-opponent").append($(this));
+                $(`#select-opponent .col-6:nth-child(${i + 1})`).append($(this));
             });
             $("#select-character").addClass("d-none");
             $("#select-opponent").removeClass("d-none");
@@ -31,13 +53,14 @@ let game = {
             this.opponent = clickedChar;
             charDiv.attr("id", "opponent");
             this.enemies.splice(this.enemies.indexOf(clickedChar), 1);
-            $(".enemy:not([id])").each(function () {
-                $("#enemy-container").append($(this));
+            $(".enemy:not([id])").each(function (i) {
+                $(`#enemy-container .col-3:nth-child(${i + 1})`).append($(this));
             });
             $("#opponent-container").append(charDiv);
             $("#selection-container").addClass("d-none");
             $("#play-container").removeClass("d-none");
             $("#attack-outcome").text('');
+            formatCircleType();
             console.log('Opponent:', this.opponent);
         }
         console.log('Enemies:', this.enemies);
@@ -74,10 +97,10 @@ let game = {
         this.opponent = '';
         this.enemies = [character0, character1, character2, character3];
         $("#attack-outcome").text('');
-        $(".character").removeAttr("id").removeClass().addClass("col-auto character");
+        $(".character").removeAttr("id").removeClass("enemy");
         for (let i = 0; i < characters.length; i++) {
             console.log($(`.character[value=${i}]`));
-            $("#select-character > .col").append($(`.character[value=${i}]`));
+            $(`#select-character .col-6:nth-child(${i + 1})`).append($(`.character[value=${i}]`));
         }
         $("#btn-reset").addClass("d-none");
         $("#btn-attack").removeClass("d-none");
@@ -92,8 +115,9 @@ let game = {
 /*---------------------------
     CONSTRUCTORS & FUNCTIONS
 ---------------------------*/
-function Character(name, healthPoints, attackPower, counterPower) {
+function Character(name, country, healthPoints, attackPower, counterPower) {
     this.name = name;
+    this.country = country;
     this.healthPoints = healthPoints;
     this.attackPower = attackPower;
     this.counterPower = counterPower;
@@ -107,9 +131,29 @@ function Character(name, healthPoints, attackPower, counterPower) {
     }
 }
 
+function formatCircleType() {
+    let captionRadius = [];
+    let textTop = document.getElementsByClassName("figure-caption");
+    let circleType = [];
+
+    $("img").each(function (i) {
+        captionRadius[i] = 4 * $(this).width() / 5;
+    });
+
+    [].forEach.call(textTop, function (elem, i) {
+        console.log(captionRadius[i])
+        circleType[i] = new CircleType(elem).radius(captionRadius[i]);
+    });
+}
+
 /*---------------------------
     MAIN PROCESS
 ---------------------------*/
+$(window).on("resize", function () {
+    console.log("updating radius");
+    formatCircleType();
+}).resize();
+
 $(".character").on("click", function () {
     game.pickCharacters($(this));
 });
@@ -121,3 +165,9 @@ $("#btn-attack").on("click", function () {
 $("#btn-reset").on("click", function () {
     game.resetGame();
 })
+
+$( document ).ready(function() {
+    console.log( "ready!" );
+    game.startGame();
+    formatCircleType();
+});
