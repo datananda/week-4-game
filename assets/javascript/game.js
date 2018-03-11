@@ -17,6 +17,7 @@ let game = {
         characters.forEach(function(elem, i) {
             elem.healthPoints = startingHP[i];
             elem.attackPower = startingAttackPower[i];
+            elem.baseAttackPower = startingAttackPower[i];
             $(`img:eq(${i})`).attr("src",`assets/images/${elem.name.toLowerCase()}.png`);
             $(`img:eq(${i})`).attr("alt",`cartoon of ${elem.name}`);
             $(`.health:eq(${i})`).text(elem.healthPoints);  
@@ -25,22 +26,21 @@ let game = {
         });
     },
     pickCharacters: function (charDiv) {
+        // PICK USER CHARACTER
         let clickedChar = characters[charDiv.attr("value")];
-        console.log('You clicked on:', clickedChar);
         if (!this.userCharacter) {
             this.userCharacter = clickedChar;
             charDiv.attr("id", "user-character");
             this.enemies.splice(this.enemies.indexOf(clickedChar), 1);
             $(".character:not([id])").each(function (i) {
-                console.log("Moving enemy:", $(this));
                 $(this).addClass("enemy");
-                $(`#select-opponent .col-8:nth-child(${i + 1})`).append($(this));
+                $(`#select-opponent .col-7:nth-child(${i + 1})`).append($(this));
             });
             $("#select-character").addClass("d-none");
             $("#select-opponent").removeClass("d-none");
             $("#character-container").append(charDiv);
-            console.log('User character:', this.userCharacter);
         }
+        // PICK OPPONENT
         else if (!this.opponent) {
             this.opponent = clickedChar;
             charDiv.attr("id", "opponent");
@@ -52,15 +52,14 @@ let game = {
             $("#selection-container").addClass("d-none");
             $("#play-container").removeClass("d-none");
             $("#attack-outcome").text('');
-            $("#attack-outcome").removeClass("bg-secondary bg-success").addClass("bg-danger d-none");
+            $("#attack-outcome").removeClass("bg-secondary bg-success");
             formatCircleType();
-            console.log('Opponent:', this.opponent);
         }
-        console.log('Enemies:', this.enemies);
     },
     attack: function () {
         if (!$(".character[id='opponent']").length) {
-            $("#attack-outcome").text("No enemy here. Select the enemy you will fight next.");
+            $("#attack-outcome").removeClass("bg-success").addClass("bg-secondary");
+            $("#attack-outcome").text("No enemy here.\nSelect the enemy you will fight next.");
         }
         else {
             let attackSummary = `You attacked ${this.opponent.name} for ${this.userCharacter.attackPower} damage.\n${this.opponent.name} attacked you back for ${this.opponent.counterPower} damage.`;
@@ -68,25 +67,25 @@ let game = {
             $(`#opponent .health`).text(this.opponent.healthPoints);
             this.userCharacter.healthPoints -= this.opponent.counterPower;
             $(`#user-character .health`).text(this.userCharacter.healthPoints);
-            this.userCharacter.attackPower += this.userCharacter.attackPower;
+            this.userCharacter.attackPower += this.userCharacter.baseAttackPower;
+            // USER CHARACTER KILLED
             if (!this.userCharacter.checkAlive()) {
-                console.log("You're dead");
                 $("#attack-outcome").removeClass("bg-danger bg-success").addClass("bg-secondary");
-                $("#attack-outcome").text(`You've been defeated by ${this.opponent.name}. Game Over!`);
+                $("#attack-outcome").text(`You've been defeated by ${this.opponent.name}.\nGame Over!`);
                 $("#btn-attack").addClass("d-none");
                 $("#btn-reset").removeClass("d-none");
             }
+            // OPPONENT KILLED
             else if (!this.opponent.checkAlive()) {
-                console.log("You're victorious");
                 $("#attack-outcome").removeClass("bg-danger bg-secondary").addClass("bg-success");
-                $("#attack-outcome").text(`You have defeated ${this.opponent.name}. Select the enemy you will fight next.`);
+                $("#attack-outcome").text(`You have defeated ${this.opponent.name}.\nSelect the enemy you will fight next.`);
                 $("#opponent").removeAttr("id").addClass("d-none");
                 this.opponent = '';
             }
             else {
+                $("#attack-outcome").removeClass("bg-success bg-secondary").addClass("bg-danger");
                 $("#attack-outcome").text(attackSummary);
             }
-            $("#attack-outcome").removeClass("d-none");
         }
     },
     resetGame: function () {
@@ -96,8 +95,7 @@ let game = {
         $("#attack-outcome").text('');
         $(".character").removeAttr("id").removeClass("enemy d-none");
         for (let i = 0; i < characters.length; i++) {
-            console.log($(`.character[value=${i}]`));
-            $(`#select-character .col-8:eq(${i})`).append($(`.character[value=${i}]`));
+            $(`#select-character .col-7:eq(${i})`).append($(`.character[value=${i}]`));
         }
         $("#btn-reset").addClass("d-none");
         $("#btn-attack").removeClass("d-none");
@@ -105,8 +103,9 @@ let game = {
         $("#play-container").addClass("d-none");
         $("#selection-container").removeClass("d-none");
         $("#select-character").removeClass("d-none");
-        $("#attack-outcome").removeClass("bg-secondary bg-success").addClass("bg-danger d-none");
+        $("#attack-outcome").removeClass("bg-secondary bg-success");
         this.startGame();
+        formatCircleType();
     }
 }
 
@@ -117,6 +116,7 @@ function Character(name, country, healthPoints, attackPower, counterPower) {
     this.name = name;
     this.country = country;
     this.healthPoints = healthPoints;
+    this.baseAttackPower = attackPower;
     this.attackPower = attackPower;
     this.counterPower = counterPower;
     this.checkAlive = function () {
@@ -139,7 +139,6 @@ function formatCircleType() {
     });
 
     [].forEach.call(textTop, function (elem, i) {
-        console.log(captionRadius[i])
         circleType[i] = new CircleType(elem).radius(captionRadius[i]);
     });
 }
@@ -148,7 +147,6 @@ function formatCircleType() {
     MAIN PROCESS
 ---------------------------*/
 $(window).on("resize", function () {
-    console.log("updating radius");
     formatCircleType();
 }).resize();
 
@@ -165,7 +163,6 @@ $("#btn-reset").on("click", function () {
 })
 
 $( document ).ready(function() {
-    console.log( "ready!" );
     game.startGame();
     formatCircleType();
 });

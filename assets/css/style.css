@@ -80,3 +80,19 @@ figcaption,
 .btn-lg {
     font-size: 2.25rem;
 }
+
+@media (max-width: 575px) {
+
+html {
+    font-size: 10px;
+}
+
+.fixed-bottom {
+    position: relative;
+}
+
+#attack-outcome {
+    height: 50px;
+}
+
+}
