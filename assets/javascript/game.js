@@ -4,7 +4,7 @@
 let names = ["Donald Trump", "Vladimir Putin", "Kim Jong Un", "Xi Jinping"];
 let countries = ["US","RU","KP","CN"];
 let startingHP = [120, 180, 100, 150];
-let startingAttackPower = [8, 8, 30, 20];
+let startingAttackPower = [10, 8, 30, 20];
 let startingCounter = [15, 25, 5, 20];
 let characters = [];
 
