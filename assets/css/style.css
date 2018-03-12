@@ -2,6 +2,10 @@ body {
     background-image: url("../images/stardust.png");
 }
 
+
+/* -----------------------------------------------------
+   FONT STYLING
+--------------------------------------------------------*/
 h1,
 h2,
 button {
@@ -14,26 +18,18 @@ figcaption,
     font-family: 'Inconsolata', monospace;
 }
 
-#user-character img {
-    border: 5px solid green;
-}
-
-.enemy img {
-    border: 5px solid yellow;
-}
-
-#opponent img {
-    border: 5px solid red;
-}
-
 #attack-outcome {
     white-space: pre-wrap;
 }
 
-.character {
-    display: inline-block;
+.btn-lg {
+    font-size: 2.25rem;
 }
 
+
+/* -----------------------------------------------------
+   CHARACTER STYLING
+--------------------------------------------------------*/
 .flag-icon {
     width: 3em;
     line-height: 2.25em;
@@ -57,6 +53,10 @@ figcaption,
     left: 12.5%;
 }
 
+
+/* -----------------------------------------------------
+   CHARACTER STYLING WHEN IN REMAINING ENEMIES AREA
+--------------------------------------------------------*/
 #enemy-container .figure-caption {
     font-size: 1em;
     height: 1.5rem;
@@ -77,10 +77,10 @@ figcaption,
     bottom: 15%;
 }
 
-.btn-lg {
-    font-size: 2.25rem;
-}
 
+/* -----------------------------------------------------
+   MEDIA QUERIES
+--------------------------------------------------------*/
 @media (max-width: 575px) {
 
 html {
